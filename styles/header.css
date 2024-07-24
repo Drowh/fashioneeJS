@@ -86,6 +86,9 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
 }
 
 .header .left-side .menu .menu-item .arrow-hover {
@@ -102,7 +105,7 @@
     display: inline-block;
 }
 
-.header .left-side .menu .menu-item.active .arrow-default{
+.header .left-side .menu .menu-item.active .arrow-default {
     display: none;
 }
 
@@ -130,6 +133,8 @@
     background: black;
     color: white;
     border-radius: 50%;
-    padding: 2px 7px;
-
+    padding: 3px 7px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
 }

@@ -5,11 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400..800;1,400..800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300..400;1,300..400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/reset.css">
+    <link rel="stylesheet" href="./styles/commons.css">
     <link rel="stylesheet" href="./styles/header.css">
     <link rel="stylesheet" href="./styles/footer.css">
-    <link rel="stylesheet" href="./styles/commons.css">
     <link rel="stylesheet" href="./styles/shop.css">
+
 </head>
 
 <body>
@@ -184,14 +190,14 @@
             <div class="products-wrapper">
                 <div class="sort-and-count">
                     <div class="products-count">
-                        There are <b>67</b> products in this category
+                        There are <span class="bold">67</span> products in this category
                     </div>
+                    <!--TODO: заменить на кастомный селект-->
                     <div class="sort">
-                        <select>
-                            <option value="relevance">By relevance</option>
-                            <option value="relevance">By relevance</option>
-                            <option value="relevance">By relevance</option>
-                            <option value="relevance">By relevance</option>
+                        <select class="input">
+                            <option value="RELEVANCE">relevance</option>
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
                         </select>
                     </div>
                 </div>
@@ -359,7 +365,7 @@
                         <img src="./icons/left-pagin-arrow.svg" alt="left-pagin-arrow">
                     </div>
                     <div class="pages">
-                        <div class="page">1</div>
+                        <div class="page active">1</div>
                         <div class="page">2</div>
                         <div class="page">3</div>
                     </div>
