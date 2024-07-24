@@ -34,7 +34,6 @@
 
 .shop .sidebar .sidebar-item .sidebar-title {
     font-family: Josefin Sans;
-    /* TODO: добавь шрифт */
     font-size: 24px;
     font-weight: 400;
     line-height: 29px;
@@ -43,46 +42,8 @@
     padding-bottom: 15px;
 }
 
-.shop .sidebar .sidebar-item .sidebar-content .categories-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.shop .sidebar .sidebar-item .sidebar-content .custom-list{
     margin: 0 0 0 20px;
-}
-
-.shop .sidebar .sidebar-item .sidebar-content .categories-list .category {
-    color: rgba(68, 68, 68, 1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 27px;
-}
-
-
-.shop .sidebar .sidebar-item .sidebar-content .categories-list .category::before {
-    content: "";
-    display: block;
-    width: 5px;
-    height: 5px;
-    background-image: url("../icons/square-row.svg");
-}
-
-.shop .sidebar .sidebar-item .sidebar-content .categories-list .category.active {
-    color: rgba(255, 142, 142, 1);
-    list-style: none;
-
-}
-
-.shop .sidebar .sidebar-item .sidebar-content .categories-list .category.active::before {
-    content: "";
-    background-image: url("../icons/small-row.svg");
-    display: block;
-    width: 25px;
-    height: 3px;
 }
 
 

@@ -69,3 +69,45 @@
     font-family: Josefin Sans;
     text-decoration: line-through;
 }
+
+
+.container .custom-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.container .custom-list .item {
+    color: rgba(68, 68, 68, 1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 27px;
+}
+
+
+.container .custom-list .item::before {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-image: url("../icons/square-row.svg");
+}
+
+.container .custom-list .item.active {
+    color: rgba(255, 142, 142, 1);
+    list-style: none;
+
+}
+
+.container .custom-list .item.active::before {
+    content: "";
+    background-image: url("../icons/small-row.svg");
+    display: block;
+    width: 25px;
+    height: 3px;
+}
