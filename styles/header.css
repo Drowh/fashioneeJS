@@ -1,8 +1,84 @@
-.header {
-    max-width: 1200px;
-    margin: 50px auto 0 auto;
+.first-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 50px 0 0 60px;
+    max-width: 1860px;
+    width: 100%;
+
+}
+
+
+.header-container .header {
     display: flex;
     justify-content: space-between;
+    margin: 0 0 0 60px;
+
+}
+
+.container-active-page {
+    max-width: 1800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.container-active-page .active-pages {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1800px;
+    width: 100%;
+    margin: 0 0 199px 60px;
+}
+
+
+.container-active-page .active-pages .points-top {
+    position: absolute;
+}
+
+
+
+.container-active-page .active-pages .active-page-top {
+    position: relative;
+    max-width: 1800px;
+    width: 100%;
+    gap: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-active-page .active-pages .active-page-top .block-left {
+    position: relative;
+    max-width: 850px;
+    height: 322px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 60px;
+}
+
+.container-active-page .active-pages .active-page-top .block-left .title {
+    font-family: Josefin Sans;
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 80px;
+    color: rgba(0, 0, 0, 1);
+}
+
+
+.container-active-page .active-pages .active-page-top .block-left .about-page {
+    display: flex;
+    gap: 12px;
+}
+
+.container-active-page .active-pages .active-page-top .img-top-right {
+    max-width: 800px;
+    height: 400px;
+    width: 100%;
+    background: rgba(241, 242, 243, 1);
+    margin-right: 120px;
 }
 
 .header .left-side {

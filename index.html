@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400..800;1,400..800&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300..400;1,300..400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300..400;1,300..400&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./styles/reset.css">
     <link rel="stylesheet" href="./styles/commons.css">
     <link rel="stylesheet" href="./styles/header.css">
@@ -19,66 +20,84 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="left-side">
-            <div class="logo-container">
-                <div class="burger-menu">
-                    <input type="checkbox" id="burger-checkbox" class="burger-checkbox">
-                    <label class="burger" for="burger-checkbox"></label>
+    <div class="header-container">
+        <header class="header">
+            <div class="left-side">
+                <div class="logo-container">
+                    <div class="burger-menu">
+                        <input type="checkbox" id="burger-checkbox" class="burger-checkbox">
+                        <label class="burger" for="burger-checkbox"></label>
+                    </div>
+                    <div class="logo">
+                        <img src="./icons/logo.svg" alt="logo">
+                    </div>
                 </div>
-                <div class="logo">
-                    <img src="./icons/logo.svg" alt="logo">
-                </div>
-            </div>
-            <div class="menu">
-                <div class="menu-item">
-                    <span>Home</span>
-                </div>
-                <div class="menu-item">
-                    <span>Pages</span>
-                    <img src="./icons/arrow.svg" alt="arrow" class="arrow-default">
-                    <img src="./icons/arrow-pink.svg" alt="arrow" class="arrow-hover">
-                </div>
-                <div class="menu-item active">
-                    <span>Shop</span>
-                    <img src="./icons/arrow.svg" alt="arrow" class="arrow-default">
-                    <img src="./icons/arrow-pink.svg" alt="arrow" class="arrow-hover">
-                </div>
-                <div class="menu-item">
-                    <span>Blog</span>
-                </div>
-                <div class="menu-item">
-                    <span>Contact</span>
-                </div>
-            </div>
-        </div>
-        <div class="right-side">
-            <div class="header-icon">
-                <img src="./icons/search.svg" alt="">
-            </div>
-            <div class="header-icon">
-                <img src="./icons/profile.svg" alt="">
-            </div>
-            <div class="header-icon">
-                <img src="./icons/heart.svg" alt="">
-                <div class="counter">10
+                <div class="menu">
+                    <div class="menu-item">
+                        <span>Home</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Pages</span>
+                        <img src="./icons/arrow.svg" alt="arrow" class="arrow-default">
+                        <img src="./icons/arrow-pink.svg" alt="arrow" class="arrow-hover">
+                    </div>
+                    <div class="menu-item active">
+                        <span>Shop</span>
+                        <img src="./icons/arrow.svg" alt="arrow" class="arrow-default">
+                        <img src="./icons/arrow-pink.svg" alt="arrow" class="arrow-hover">
+                    </div>
+                    <div class="menu-item">
+                        <span>Blog</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Contact</span>
+                    </div>
                 </div>
             </div>
-            <div class="header-icon">
-                <img src="./icons/cart.svg" alt="">
-                <div class="counter">2
+            <div class="right-side">
+                <div class="header-icon">
+                    <img src="./icons/search.svg" alt="">
+                </div>
+                <div class="header-icon">
+                    <img src="./icons/profile.svg" alt="">
+                </div>
+                <div class="header-icon">
+                    <img src="./icons/heart.svg" alt="">
+                    <div class="counter">10
+                    </div>
+                </div>
+                <div class="header-icon">
+                    <img src="./icons/cart.svg" alt="">
+                    <div class="counter">2
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </header>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+        </header>
+    </div>
+
+
+    <div class="container-active-page">
+        <div class="active-pages">
+            <div class="points-top">
+                <img src="./icons/points-top.svg" alt="">
+            </div>
+            <div class="active-page-top">
+                <div class="block-left">
+                    <div class="title">Shop</div>
+                    <div class="about-page">
+                        <div class="vertical-line"></div>
+                        <div>Home</div>
+                        <div>Shop</div>
+                    </div>
+                </div>
+                <div class="img-top-right"></div>
+            </div>
+            
+        </div>
+    </div>
+
+
 
     <div class="container">
         <div class="shop">
@@ -216,7 +235,6 @@
                                         <img src="./icons/heart.svg" alt="">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="info">
@@ -377,13 +395,7 @@
         </div>
     </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-info">
@@ -445,8 +457,8 @@
                     <div class="newsletter-form">
                         <form action="">
                             <label>
-                            <input type="text" placeholder="Enter your email" class="input">
-                            <img src="./icons/send.svg" alt="send" class="send-icon">
+                                <input type="text" placeholder="Enter your email" class="input">
+                                <img src="./icons/send.svg" alt="send" class="send-icon">
                             </label>
                         </form>
                     </div>
@@ -476,7 +488,9 @@
             </div>
         </div>
     </footer>
+
 </body>
+
 
 <body>
 
