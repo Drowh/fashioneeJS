@@ -1,0 +1,110 @@
+.cart {}
+
+.cart .order-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.cart .order-wrapper .products-list {
+    max-width: 720px;
+    width: 100%;
+    /* TODO: удалить*/
+}
+
+
+.cart .order-wrapper .order {
+    max-width: 360px;
+    width: 100%;
+    border: 1px solid rgba(68, 68, 68, 0.1);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.cart .order-wrapper .order .order-price-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+
+.cart .order-wrapper .order .order-price-wrapper .price-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 27px;
+    color: rgba(68, 68, 68, 1);
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(68, 68, 68, 10%);
+}
+
+.cart .order-wrapper .order .order-price-wrapper .price-row .name {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 27px;
+    color: rgba(68, 68, 68, 1);
+}
+
+
+.cart .order-wrapper .order .order-price-wrapper .price-row .price {
+    font-family: Josefin Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgba(68, 68, 68, 1);
+
+}
+
+
+
+
+
+.cart .order-wrapper .order .order-price-wrapper .price-row.delimiter .additional {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    
+}
+
+.cart .order-wrapper .order .order-price-wrapper .price-row.delimiter {
+    border-bottom: 2px solid rgba(0, 0, 0, 1);
+}
+
+
+
+
+.cart .order-wrapper .order .order-price-wrapper .price-row.total .name {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 34px;
+    color: rgba(0, 0, 0, 1);
+}
+.cart .order-wrapper .order .order-price-wrapper .price-row.total {
+    border: none;
+}
+
+.cart .order-wrapper .order .order-price-wrapper .price-row.total .price {
+    font-family: Josefin Sans;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 25px;
+    color: rgba(0, 0, 0, 1);
+}
+
+.cart .order-wrapper .order .title {
+    font-family: Josefin Sans;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 38px;
+    color: rgba(0, 0, 0, 1);
+}
+
+.cart .order-wrapper .order .button-wrapper {
+    max-width: unset;
+}
