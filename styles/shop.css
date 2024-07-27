@@ -356,3 +356,189 @@
 .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background .newsletter-block .emeil-button .button-wrapper .button {
     padding: 17px 30px;
 }
+
+
+@media screen and (max-width: 907px) {
+    .header-container .header {
+        flex-wrap: wrap;
+        gap: 50px;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+
+    .header .left-side {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .container-active-page .active-pages .active-page-top {
+        flex-wrap: wrap;
+        gap: 50px;
+    }
+
+    .container-active-page .active-pages .active-page-top .block-left {
+        padding-top: 14px;
+    }
+
+    .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background {
+        margin: 100px 0 0 0;
+    }
+
+    .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background .newsletter-block {
+        margin: 0;
+    }
+
+    .footer {
+        margin-top: 50px;
+    }
+
+    .footer .footer-info {
+        flex-direction: column;
+    }
+
+    .footer .points-right-footer {
+        right: 0;
+        top: 219px;
+    }
+
+    .footer .points-right-footer .points-right {
+        width: 250px;
+    }
+
+    .shop .products-wrapper .sort-and-count {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+
+
+}
+
+@media screen and (max-width: 560px) {
+
+
+    .header .left-side .menu {
+        gap: 20px;
+    }
+
+
+    .shop {
+        max-width: 200px;
+    }
+
+    .shop .sidebar {
+        max-width: 128px;
+        gap: 20px;
+    }
+
+    .shop .sidebar .season-sale-banner {
+        max-width: 150px;
+    }
+
+    .shop .sidebar .sidebar-item .sidebar-content .reviewed-priducts .product {
+        flex-direction: column;
+    }
+
+    .shop .products-wrapper .pagination {
+        gap: 15px;
+    }
+
+    .shop .products-wrapper .pagination .pages {
+        gap: 15px;
+    }
+
+    .container .button-wrapper .button {
+        padding: 12px 16px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+
+    .container-active-page .active-pages .active-page-top .block-left {
+        padding: 0;
+    }
+
+
+    .container-active-page .active-pages .active-page-top .block-left {
+        height: 336px;
+    }
+
+    .container-active-page .active-pages .active-page-top .img-top-right {
+        max-width: 400px;
+        max-height: 200px;
+        height: 100%;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+
+
+
+    .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background .newsletter-block .emeil-button .button-wrapper {
+        max-width: 86px;
+    }
+
+    .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background .newsletter-block .emeil-button .button-wrapper .button {
+        padding: 15px 15px;
+        font-size: 11px;
+    }
+
+    .container.newsletter-container .newsletter-wrapper .newsletter .newsletter-wrapper-background .newsletter-block .emeil-button {
+        gap: 15px;
+    }
+
+    .container .input {
+        font-size: 12px;
+    }
+
+    .shop {
+        margin: 5px;
+        gap: 40px;
+    }
+
+
+    .shop .products-wrapper .pagination .left-pagin-arrow {
+        max-width: 25px;
+    }
+
+    .shop .products-wrapper .pagination .right-pagin-arrow {
+        max-width: 25px;
+    }
+
+    .shop .products-wrapper .pagination {
+        gap: 9px;
+    }
+
+    .shop .products-wrapper .pagination .pages {
+        gap: 9px;
+    }
+
+    .shop .products-wrapper .products .product .photo .top-bar {
+        left: 0;
+    }
+
+    .shop .products-wrapper .products .product .photo .top-bar .labels {
+        gap: 9px;
+    }
+
+    .shop .products-wrapper .products .product .photo {
+        height: 215px;
+        width: 140px;
+    }
+
+    .footer .footer-info .column.column-4 {
+        margin: 20px;
+    }
+
+    .footer .footer-info {
+        margin: 10px;
+    }
+
+    .footer .copyright {
+        margin: 5px;
+    }
+
+}
