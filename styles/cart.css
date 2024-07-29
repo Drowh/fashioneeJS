@@ -1,11 +1,10 @@
-.container-active-page .active-pages .active-page-top .block-left {
-    padding-right: 22px;
-}
+
 
 .cart {
     display: flex;
     flex-direction: column;
     gap: 60px;
+    margin: 199px auto 0;
 }
 
 .cart .order-wrapper {

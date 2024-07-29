@@ -1,7 +1,7 @@
 .footer {
     border-top: 20px solid rgba(238, 238, 238, 1);
     position: relative;
-    margin-top: 250px;
+    margin: 110px auto 0;
 }
 
 .footer .small-points-footer {

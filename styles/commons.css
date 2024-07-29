@@ -3,9 +3,9 @@
 }
 
 .header-container {
-    max-width: 1920px;
+    max-width: 1800px;
     width: 100%;
-    margin: 50px auto;
+    margin: 50px auto 0;
 }
 
 .container {
@@ -123,62 +123,55 @@
 
 
 .container-active-page {
-    max-width: 1920px;
+
+    max-width: 1800px;
     width: 100%;
-    margin: 0 auto;
+    margin: 50px auto 0;
 }
 
 
-.container-active-page .active-pages {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1860px;
-    width: 100%;
-    margin-bottom: 199px;
-}
 
-
-.container-active-page .active-pages .points-top {
+.points-top {
     position: absolute;
+    top: 30px;
+    left: 0;
 }
 
 
 
-.container-active-page .active-pages .active-page-top {
+
+.active-page-top {
     position: relative;
-    max-width: 1860px;
     width: 100%;
-    gap: 150px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.container-active-page .active-pages .active-page-top .block-left {
+.block-left {
     position: relative;
     max-width: 850px;
-    height: 322px;
     width: 100%;
-    margin-left: -60px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    justify-content: center;
     align-items: center;
 }
 
-.container-active-page .active-pages .active-page-top .block-left .text-inside-blockleft {
-    padding-left: 114px;
+.text-inside-blockleft {
+    display: flex;
+    flex-direction: column;
+    gap: 21px;
 }
 
-.container-active-page .active-pages .active-page-top .block-left .hr-line {
-    max-width: 850px;
+.hr-line {
     width: 100%;
-    height: 2px;
-    color: rgba(0, 0, 0, 1);
+    position: absolute;
+    right: 60px;
+    top: 144px;
+
 }
 
-.container-active-page .active-pages .active-page-top .block-left .text-inside-blockleft .title {
+.title {
     font-family: Josefin Sans;
     font-size: 80px;
     font-weight: 400;
@@ -187,7 +180,7 @@
 }
 
 
-.container-active-page .active-pages .active-page-top .block-left .text-inside-blockleft .about-page {
+.about-page {
     display: flex;
     gap: 12px;
     font-size: 14px;
@@ -197,22 +190,21 @@
 }
 
 
-.container-active-page .active-pages .active-page-top .block-left .about-page .active-page {
+.active-page {
     color: rgba(255, 142, 142, 1);
 }
 
-.container-active-page .active-pages .active-page-top .block-left .text-inside-blockleft .about-page .vertical-line {
+.vertical-line {
     width: 1.5px;
     background: rgba(0, 0, 0, 1);
 }
 
-
-.container-active-page .active-pages .active-page-top .img-top-right {
+.img-top-right {
     max-width: 800px;
     height: 400px;
     width: 100%;
     background: rgba(241, 242, 243, 1);
-    margin-right: 120px;
+    margin-right: 60px;
 }
 
 .container .find-us .find-us-text {
