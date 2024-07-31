@@ -1,4 +1,8 @@
-
+.footer {
+    border-top: 20px solid rgba(238, 238, 238, 1);
+    position: relative;
+    margin: 250px auto 0;
+}
 
 .cart {
     display: flex;
