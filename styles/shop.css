@@ -236,6 +236,10 @@
     background: rgba(149, 204, 181, 1);
 }
 
+.shop .products-wrapper .products .product .photo .product-image {
+    width: 100%;
+}
+
 .shop .products-wrapper .products .product .info {
     display: flex;
     flex-direction: column;
