@@ -318,6 +318,116 @@ const products = [
         "image": "https://fs-thb03.getcourse.ru/fileservice/file/thumbnail/h/b14b37c5f1fbd94505697d827305348b.png/s/f1200x/a/534336/sc/57"
     }
 ]
+const PRODUCT_IN_BASKET_KEY = 'product-in-bucket'
+const FAVORITE_PRODUCTS_KEY = 'js-favorites-counter'
+
+
+const getFromLS = (key) => {
+    try {
+        return JSON.parse(localStorage.getItem(key))
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const setToLS = (key, value) => {
+    try {
+        localStorage.setItem(key, JSON.stringify(value))
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+const updateHeaderInfo = () => {
+    const basketCounter = document.getElementsByClassName('js-basjet-counter')
+    const favoriteCounter = document.getElementsByClassName('js-favorites-counter')
+
+    if (!basketCounter.length || !favoriteCounter.length) {
+        return false
+    }
+
+    const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
+    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
+
+    if (!productsInBasket || !favoriteProducts) {
+        return false
+    }
+
+    let countInBasket = 0
+    let countInFavorites = 0
+
+    productsInBasket.forEach((product) => {
+        countInBasket += product.quantity
+    })
+
+    favoriteProducts.forEach((product) => {
+        countInFavorites += 1
+    })
+
+    basketCounter[0].innerHTML = countInBasket
+    favoriteCounter[0].innerHTML = countInFavorites
+}
+
+
+const buyProduct = (product) => {
+    const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
+
+    if (!productsInBasket) {
+        setToLS(PRODUCT_IN_BASKET_KEY, [{ ...product, quantity: 1 }])
+        updateHeaderInfo()
+
+        return true
+    }
+
+    let hasProductsInBasket = false
+
+    const unpdateProducts = productsInBasket.map((productsInBasket) => {
+        if (productsInBasket.id === product.id) {
+            hasProductsInBasket = true
+
+            return {
+                ...productsInBasket,
+                quantity: productsInBasket.quantity + 1
+            }
+        }
+        return productsInBasket
+    })
+
+    if (hasProductsInBasket) {
+        setToLS(PRODUCT_IN_BASKET_KEY, unpdateProducts)
+        updateHeaderInfo()
+
+        return true
+    }
+
+    productsInBasket.push({ ...product, quantity: 1 })
+
+    setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket)
+    updateHeaderInfo()
+}
+
+
+const toggleFavorite = (product) => {
+    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
+
+    if (!favoriteProducts) {
+        setToLS(FAVORITE_PRODUCTS_KEY, [product])
+        updateHeaderInfo()
+
+        return true
+    }
+
+    const updatedFavoriteProducts = favoriteProducts.filter((id) => id !== product)
+
+    if (updatedFavoriteProducts.length === favoriteProducts.length) {
+        updatedFavoriteProducts.push(product)
+    }
+
+    setToLS(FAVORITE_PRODUCTS_KEY, updatedFavoriteProducts)
+    updateHeaderInfo()
+}
+
 
 
 const createProduct = (product) => {
@@ -334,6 +444,7 @@ const createProduct = (product) => {
     labels.classList.add("labels")
 
 
+    
     if (product.isSale) {
         const label = document.createElement("div")
         label.classList.add("label")
@@ -358,8 +469,14 @@ const createProduct = (product) => {
     topBar.classList.add("favorites")
 
     const favoriteIcon = document.createElement("img")
-    favoriteIcon.src = "./icons/heart.svg"
+    favoriteIcon.src = FAVORITE_PRODUCTS_KEY.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
     favoriteIcon.alt = "Favorite Icon"
+    
+    favoriteIcon.addEventListener("click", (event) => {
+        toggleFavorite(product.id)
+
+        favoriteIcon.src = FAVORITE_PRODUCTS_KEY.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
+    })
 
     favorites.appendChild(favoriteIcon)
 
@@ -370,7 +487,7 @@ const createProduct = (product) => {
     const productImage = document.createElement("img")
     productImage.src = product.image
     productImage.classList.add("product-image")
-    
+
     photo.appendChild(topBar)
     photo.appendChild(productImage)
 
@@ -405,7 +522,8 @@ const createProduct = (product) => {
     buyButton.classList.add("buy-btn")
     buyButton.innerHTML = "Buy Now"
     buyButton.addEventListener("click", (event) => {
-        console.log(product)
+        buyProduct(product)
+
     })
 
     productWrapper.appendChild(photo)
