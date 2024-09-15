@@ -318,8 +318,8 @@ const products = [
         "image": "https://fs-thb03.getcourse.ru/fileservice/file/thumbnail/h/b14b37c5f1fbd94505697d827305348b.png/s/f1200x/a/534336/sc/57"
     }
 ]
-const PRODUCT_IN_BASKET_KEY = 'product-in-bucket'
-const FAVORITE_PRODUCTS_KEY = 'js-favorites-counter'
+const PRODUCT_IN_BASKET_KEY = 'product-in-counter'
+const FAVORITE_PRODUCTS_KEY = 'favorites-counter'
 
 
 const filter = {
@@ -357,12 +357,13 @@ const setToLS = (key, value) => {
 
 
 const updateHeaderInfo = () => {
-    const basketCounter = document.getElementsByClassName('js-basjet-counter')
+    const basketCounter = document.getElementsByClassName('js-basket-counter')
     const favoriteCounter = document.getElementsByClassName('js-favorites-counter')
 
     if (!basketCounter.length || !favoriteCounter.length) {
         return false
     }
+
 
     const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
     const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
@@ -426,24 +427,18 @@ const buyProduct = (product) => {
 
 
 const toggleFavorite = (product) => {
-    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
+    let favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || []
 
-    if (!favoriteProducts) {
-        setToLS(FAVORITE_PRODUCTS_KEY, [product])
-        updateHeaderInfo()
-
-        return true
+    if (favoriteProducts.includes(product)) {
+        favoriteProducts = favoriteProducts.filter((id) => id !== product)
+    } else {
+        favoriteProducts.push(product)
     }
 
-    const updatedFavoriteProducts = favoriteProducts.filter((id) => id !== product)
-
-    if (updatedFavoriteProducts.length === favoriteProducts.length) {
-        updatedFavoriteProducts.push(product)
-    }
-
-    setToLS(FAVORITE_PRODUCTS_KEY, updatedFavoriteProducts)
+    setToLS(FAVORITE_PRODUCTS_KEY, favoriteProducts)
     updateHeaderInfo()
 }
+
 
 
 
@@ -486,17 +481,21 @@ const createProduct = (product) => {
     topBar.classList.add("favorites")
 
     const favoriteIcon = document.createElement("img")
-    favoriteIcon.src = FAVORITE_PRODUCTS_KEY.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
+    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || [];
+    favoriteIcon.src = favoriteProducts.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
+
     favoriteIcon.alt = "Favorite Icon"
     favoriteIcon.style.cursor = "pointer"
 
     favoriteIcon.addEventListener("click", (event) => {
         toggleFavorite(product.id)
 
-        favoriteIcon.src = FAVORITE_PRODUCTS_KEY.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
-    })
+        const updatedFavoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || []
+        favoriteIcon.src = updatedFavoriteProducts.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
+    });
 
     favorites.appendChild(favoriteIcon)
+
 
 
     topBar.appendChild(labels)
