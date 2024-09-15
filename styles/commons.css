@@ -49,10 +49,19 @@
     text-align: center;
 }
 
+.container .button-wrapper .button:disabled {
+    opacity: 0.5;
+}
+
+
 .container .button-wrapper .vertical-line {
     width: 2px;
     height: 100%;
     background: rgba(0, 0, 0, 1);
+}
+
+.container .button-wrapper .button:disabled ~ .vertical-line {
+    opacity: 0.5;
 }
 
 .container .price {

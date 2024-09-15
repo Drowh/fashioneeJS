@@ -322,6 +322,23 @@ const PRODUCT_IN_BASKET_KEY = 'product-in-bucket'
 const FAVORITE_PRODUCTS_KEY = 'js-favorites-counter'
 
 
+const filter = {
+
+}
+
+
+const debounce = (f, t) => {
+    return function (args) {
+        let previousCall = this.lastCall;
+        this.lastCall = Date.now();
+        if (previousCall && ((this.lastCall - previousCall) <= t)) {
+            clearTimeout(this.lastCallTimer);
+        }
+        this.lastCallTimer = setTimeout(() => f(args), t);
+    }
+}
+
+
 const getFromLS = (key) => {
     try {
         return JSON.parse(localStorage.getItem(key))
@@ -444,7 +461,7 @@ const createProduct = (product) => {
     labels.classList.add("labels")
 
 
-    
+
     if (product.isSale) {
         const label = document.createElement("div")
         label.classList.add("label")
@@ -471,7 +488,8 @@ const createProduct = (product) => {
     const favoriteIcon = document.createElement("img")
     favoriteIcon.src = FAVORITE_PRODUCTS_KEY.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
     favoriteIcon.alt = "Favorite Icon"
-    
+    favoriteIcon.style.cursor = "pointer"
+
     favoriteIcon.addEventListener("click", (event) => {
         toggleFavorite(product.id)
 
@@ -521,8 +539,10 @@ const createProduct = (product) => {
     const buyButton = document.createElement("button")
     buyButton.classList.add("buy-btn")
     buyButton.innerHTML = "Buy Now"
+    buyButton.style.cursor = "pointer"
     buyButton.addEventListener("click", (event) => {
         buyProduct(product)
+
 
     })
 
@@ -538,6 +558,7 @@ const createProductList = (products) => {
     const jsProducts = document.getElementsByClassName("js-products")
 
     if (jsProducts.length) {
+        jsProducts[0].innerHTML = ""
         for (const product of products) {
             const createdProduct = createProduct(product)
             jsProducts[0].appendChild(createdProduct)
@@ -545,4 +566,86 @@ const createProductList = (products) => {
     }
 }
 
+const filterProducts = (searchValue, filter, sort, pagination) => {
+    let filteredProducts = [...products]
+
+    if (searchValue) {
+        filteredProducts = filteredProducts.filter((product) => {
+            return product.name.toLowerCase().includes(searchValue.toLowerCase())
+        })
+    }
+
+    const productsCount = filteredProducts.length
+
+    return {
+        filteredProducts,
+        productsCount
+    }
+}
+
+const updateProductsCount = (count) => {
+    document.getElementById("products-count").innerHTML = count
+}
+
+
+const toogleBlockFilterBtn = () => {
+    const applyFilter = document.getElementById("apply-filter")
+
+    if (!Object.keys(filter).length) {
+        applyFilter.setAttribute("disabled", "disabled")
+        return
+
+    }
+
+    applyFilter.removeAttribute("disabled")
+}
+
+
+
+document.getElementById("search-row").addEventListener("keyup", debounce((e) => {
+    const { filteredProducts, productsCount } = filterProducts(e.target.value)
+    createProductList(filteredProducts)
+    updateProductsCount(productsCount)
+}, 500)
+)
+
+
+const categoryItems = document.getElementsByClassName("js-category")
+
+for (let i = 0; i < categoryItems.length; i++) {
+    categoryItems[i].addEventListener("click", (e) => {
+        if (e.target.classList.contains("active")) {
+            e.target.classList.remove("active")
+            categoryItems[0].classList.add("active")
+
+            delete filter["category"]
+
+            toogleBlockFilterBtn()
+
+            return
+        }
+
+        const alreadyActive = document.querySelectorAll(".js-category.active")
+
+        if (alreadyActive?.length) {
+            alreadyActive[0].classList.remove("active")
+        }
+
+        e.target.classList.add("active")
+
+        if (e.target.dataset.category === "ALL") {
+            delete filter["category"]
+        } else {
+            filter["category"] = e.target.dataset.category
+        }
+
+        toogleBlockFilterBtn()
+    })
+}
+
+document.getElementById("apply-filter").addEventListener("click", () => {
+
+})
+
 createProductList(products)
+updateHeaderInfo()

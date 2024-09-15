@@ -102,7 +102,7 @@
             <div class="sidebar">
                 <div class="search">
                     <label>
-                        <input type="text" placeholder="Search" class="input search-row">
+                        <input type="text" placeholder="Search" class="input search-row" id="search-row">
                         <img src="./icons/search.svg" alt="Search Icon" class="search-icon">
                     </label>
                 </div>
@@ -110,11 +110,11 @@
                     <div class="sidebar-title">Categories</div>
                     <div class="sidebar-content">
                         <ul class="custom-list">
-                            <li class="item">All</li>
-                            <li class="item active">Men</li>
-                            <li class="item">Women</li>
-                            <li class="item">Accessories</li>
-                            <li class="item">New Arrivals</li>
+                            <li class="item js-category active" data-category = "ALL">All</li>
+                            <li class="item js-category" data-catrgory = "Men">Men</li>
+                            <li class="item js-category" data-catrgory = "Women">Women</li>
+                            <li class="item js-category" data-catrgory = "Accessories">Accessories</li>
+                            <li class="item js-category" data-catrgory = "New Arrivals">New Arrivals</li>
                         </ul>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="sidebar-item">
                     <div class="button-wrapper">
-                        <button class="button">Apply Filter</button>
+                        <button class="button" id="apply-filter" disabled>Apply Filter</button>
                         <div class="vertical-line"></div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
             <div class="products-wrapper">
                 <div class="sort-and-count">
                     <div class="products-count">
-                        There are <span class="bold">67</span> products in this item
+                        There are <span id="products-count" class="bold" >67</span> products in this item
                     </div>
                     <!--TODO: заменить на кастомный селект-->
                     <div class="sort">
