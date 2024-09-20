@@ -122,8 +122,8 @@
                     <div class="sidebar-title">Price</div>
                     <div class="sidebar-content">
                         <div class="price-bar">
-                            <input type="text" placeholder="0" class="input">
-                            <input type="text" placeholder="200" class="input">
+                            <input type="text" placeholder="0" class="input" id="min-price">
+                            <input type="text" placeholder="200" class="input" id="max-price">
                         </div>
                     </div>
                 </div>
@@ -132,23 +132,23 @@
                     <div class="sidebar-content">
                         <div class="colors">
                             <div class="color">
-                                <input type="checkbox" class="color-checkbox" id="black" name="black" value="black">
+                                <input type="checkbox" class="color-checkbox js-color" id="black" name="black" value="Black">
                                 <label for="black" class="color-name">Black</label>
                             </div>
                             <div class="color">
-                                <input type="checkbox" class="color-checkbox" id="blue" name="blue" value="blue">
+                                <input type="checkbox" class="color-checkbox js-color" id="blue" name="blue" value="Blue">
                                 <label for="blue" class="color-name">Blue</label>
                             </div>
                             <div class="color">
-                                <input type="checkbox" class="color-checkbox" id="red" name="red" value="red">
+                                <input type="checkbox" class="color-checkbox js-color" id="red" name="red" value="Red">
                                 <label for="red" class="color-name">Red</label>
                             </div>
                             <div class="color">
-                                <input type="checkbox" class="color-checkbox" id="yellow" name="yellow" value="yellow">
-                                <label for="yellow" class="color-name">Yellow</label>
+                                <input type="checkbox" class="color-checkbox js-color" id="yellow" name="yellow" value="Brown">
+                                <label for="yellow" class="color-name">Brown</label>
                             </div>
                             <div class="color">
-                                <input type="checkbox" class="color-checkbox" id="green" name="green" value="green">
+                                <input type="checkbox" class="color-checkbox js-color" id="green" name="green" value="Green">
                                 <label for="green" class="color-name">Green</label>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="sidebar-item">
                     <div class="button-wrapper">
-                        <button class="button" id="apply-filter">Apply Filter</button>
+                        <button class="button" id="apply-filter" disabled>Apply Filter</button>
                         <div class="vertical-line"></div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
             <div class="products-wrapper">
                 <div class="sort-and-count">
                     <div class="products-count">
-                        There are <span id="products-count" class="bold" >67</span> products in this item
+                        There are <span id="products-count" class="bold" >loading..</span> products in this item
                     </div>
                     <!--TODO: заменить на кастомный селект-->
                     <div class="sort">

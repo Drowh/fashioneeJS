@@ -61,7 +61,7 @@ const products = [
         "categories": [
             "Women"
         ],
-        "color": "Brown",
+        "color": "Blue",
         "image": "https://fs-thb03.getcourse.ru/fileservice/file/thumbnail/h/ec9bc0e735f3c75eab9d4d8c4f8630fe.png/s/f1200x/a/534336/sc/400"
     },
     {
@@ -220,7 +220,7 @@ const products = [
         "categories": [
             "Women"
         ],
-        "color": "Brown",
+        "color": "Blue",
         "image": "https://fs-thb03.getcourse.ru/fileservice/file/thumbnail/h/ec9bc0e735f3c75eab9d4d8c4f8630fe.png/s/f1200x/a/534336/sc/400"
     },
     {
@@ -325,14 +325,23 @@ const FAVORITE_PRODUCTS_KEY = 'favorites-counter'
 let searchValue = ''
 
 
-// Объект фильтра
-const filter = {
-    // category : 'ALL',  
-    // price : {           
-    //     min: 0,
-    //     max: 999999
-    // },
-    // color: [],          
+// Объекты фильтра
+let olldFilter = {
+    category : 'ALL',  
+    price: {
+        min: 0,
+        max: 999999
+    },
+    color: [],
+}
+
+let currentFilter = {
+    category: 'ALL',
+    price: {
+        min: 0,
+        max: 999999
+    },
+    color: [],
 }
 
 // Функция debounce позволяет избежать частых вызовов функции фильтрации при вводе текста.
@@ -589,15 +598,27 @@ const filterProducts = (searchValue, filter, sort, pagination) => {
         })
     }
 
-    // Если фильтр содержит параметры, проверяем их.
-    if (Object.keys(filter).length) {
-        if (filter.category) {
-            // Фильтруем товары по категории, если она выбрана.
-            filteredProducts = filteredProducts.filter((product) => {
-                return product.categories.includes(filter.category)
-            })
-        }
+    // фильтрация по категориям если не all.
+    if (filter.category !== 'ALL') {
+        filteredProducts = filteredProducts.filter(product =>
+            product.categories.includes(filter.category)
+        );
     }
+
+    // Фильтрация по цене
+    if (filter.price) {
+        filteredProducts = filteredProducts.filter((product) => {
+            return product.price >= filter.price.min && product.price <= filter.price.max
+        })
+    }
+
+    // Фильтрация по цвету
+    if(filter.color.length) {
+        filteredProducts = filteredProducts.filter((product) => {
+            return filter.color.some(color => product.color.includes(color))
+        });
+    }
+
 
     // Подсчитываем количество отфильтрованных товаров.
     const productsCount = filteredProducts.length
@@ -616,16 +637,17 @@ const updateProductsCount = (count) => {
 
 
 const toogleBlockFilterBtn = () => {
-    // TODO: сделай рабочую кнопку, Проблема в том, что если мы нажмем на категорию, применим, потом на жмем на ALL, то кнопка закроется а списаок товаров не обновится
-    //     const applyFilter = document.getElementById("apply-filter")
+    const applyFilter = document.getElementById("apply-filter")
 
-    //     if (!Object.keys(filter).length) {
-    //         applyFilter.setAttribute("disabled", "disabled")
-    //         return
-
-    //     }
-
-    //     applyFilter.removeAttribute("disabled")
+    if (currentFilter.category ||
+        currentFilter.price.min ||
+        currentFilter.price.max  ||
+        currentFilter.color.length !==
+        olldFilter.category) {
+        applyFilter.removeAttribute("disabled")
+    } else {
+        applyFilter.setAttribute("disabled", "disabled")
+    }
 }
 
 
@@ -634,7 +656,7 @@ const toogleBlockFilterBtn = () => {
 document.getElementById("search-row").addEventListener("keyup", debounce((e) => {
     searchValue = e.target.value // Сохраняем введенное значение поиска.
     // Фильтруем товары по значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, filter)
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter)
     createProductList(filteredProducts) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
 }, 500))
@@ -644,12 +666,15 @@ const categoryItems = document.getElementsByClassName("js-category")
 
 for (let i = 0; i < categoryItems.length; i++) {
     categoryItems[i].addEventListener("click", (e) => {
+        // Добавляем выбранную категорию в фильтр.
+        currentFilter["category"] = e.target.dataset.category
         // Если категория уже активна, отключаем её и выбираем категорию "Все".
         if (e.target.classList.contains("active")) {
             e.target.classList.remove("active")
             categoryItems[0].classList.add("active") // Активируем категорию "Все".
-            delete filter["category"] // Удаляем фильтр по категории.
+
             toogleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
+
             return
         }
 
@@ -661,26 +686,58 @@ for (let i = 0; i < categoryItems.length; i++) {
 
         e.target.classList.add("active") // Делаем текущую категорию активной.
 
-        // Если выбрана категория "Все", удаляем фильтр по категории.
-        if (e.target.dataset.category === "ALL") {
-            delete filter["category"]
-        } else {
-            // Добавляем выбранную категорию в фильтр.
-            filter["category"] = e.target.dataset.category
-        }
 
         toogleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
     })
 }
 
+// Обработка кликов по чекбоксам для фильтрации по цвету
+const colorCheckboxes = document.getElementsByClassName("js-color");
+
+for (let i = 0; i < colorCheckboxes.length; i++) {
+    colorCheckboxes[i].addEventListener("change", (e) => {
+        const selectedColor = e.target.value
+
+        if (e.target.checked) {
+            // Если чекбокс выбран, добавляем цвет в фильтр
+            if (!currentFilter.color.includes(selectedColor)) {
+                currentFilter.color.push(selectedColor)
+            }
+        } else {
+            // Если чекбокс снят, удаляем цвет из фильтра
+            currentFilter.color = currentFilter.color.filter(color => color !== selectedColor)
+        }
+
+        toogleBlockFilterBtn()
+    });
+}
+
+// Обрабатываем изменение минимальной и максимальной цены
+document.getElementById("min-price").addEventListener("input", (e) => {
+    currentFilter.price.min = e.target.value
+    toogleBlockFilterBtn()
+});
+
+document.getElementById("max-price").addEventListener("input", (e) => {
+    currentFilter.price.max = e.target.value
+    toogleBlockFilterBtn()
+});
+
+
 // Обработчик для кнопки "Применить фильтр", который фильтрует товары при клике на кнопку.
 document.getElementById("apply-filter").addEventListener("click", () => {
     // Фильтруем товары по текущему значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, filter)
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter)
     createProductList(filteredProducts) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
+
+    document.getElementById("apply-filter").setAttribute('disabled', 'disabled'); // При applyFilter.setAttribute("disabled", "disabled") не работало
+    
+
+    olldFilter = { ...currentFilter }
 })
 
 // Начальная загрузка товаров.
 createProductList(products) // Создаем список товаров.
 updateHeaderInfo() // Обновляем информацию в заголовке (например, количество товаров).
+updateProductsCount(products.length)
