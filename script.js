@@ -323,11 +323,13 @@ const FAVORITE_PRODUCTS_KEY = 'favorites-counter'
 
 // Переменная для хранения значения поиска, которое будет вводиться пользователем.
 let searchValue = ''
+// Переменная для хранения выбранного значения сортировки
+let sort = ''
 
 
 // Объекты фильтра
 let olldFilter = {
-    category : 'ALL',  
+    category: 'ALL',
     price: {
         min: 0,
         max: 999999
@@ -335,7 +337,7 @@ let olldFilter = {
     color: [],
 }
 
-let currentFilter = {
+const currentFilter = {
     category: 'ALL',
     price: {
         min: 0,
@@ -613,12 +615,27 @@ const filterProducts = (searchValue, filter, sort, pagination) => {
     }
 
     // Фильтрация по цвету
-    if(filter.color.length) {
+    if (filter.color.length) {
         filteredProducts = filteredProducts.filter((product) => {
             return filter.color.some(color => product.color.includes(color))
         });
     }
 
+
+    if (sort) {
+        // Если значение сортировки установлено, сортируем товары
+        filteredProducts.sort((a, b) => {
+            if (sort === "ASC") { // Сортировка по возрастанию (от A до Z)
+                if (a.name > b.name) return 1
+                if (a.name === b.name) return 0
+                if (a.name < b.name) return -1
+            }
+                                   // Сортировка по убыванию (от Z до A)
+            if (a.name > b.name) return -1
+            if (a.name === b.name) return 0
+            if (a.name < b.name) return 1
+        })
+    }
 
     // Подсчитываем количество отфильтрованных товаров.
     const productsCount = filteredProducts.length
@@ -641,7 +658,7 @@ const toogleBlockFilterBtn = () => {
 
     if (currentFilter.category ||
         currentFilter.price.min ||
-        currentFilter.price.max  ||
+        currentFilter.price.max ||
         currentFilter.color.length !==
         olldFilter.category) {
         applyFilter.removeAttribute("disabled")
@@ -656,7 +673,7 @@ const toogleBlockFilterBtn = () => {
 document.getElementById("search-row").addEventListener("keyup", debounce((e) => {
     searchValue = e.target.value // Сохраняем введенное значение поиска.
     // Фильтруем товары по значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter)
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
     createProductList(filteredProducts) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
 }, 500))
@@ -725,18 +742,111 @@ document.getElementById("max-price").addEventListener("input", (e) => {
 
 
 // Обработчик для кнопки "Применить фильтр", который фильтрует товары при клике на кнопку.
-document.getElementById("apply-filter").addEventListener("click", () => {
+document.getElementById("apply-filter").addEventListener("click", (e) => {
     // Фильтруем товары по текущему значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter)
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
     createProductList(filteredProducts) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
 
-    document.getElementById("apply-filter").setAttribute('disabled', 'disabled'); // При applyFilter.setAttribute("disabled", "disabled") не работало
-    
+    e.target.setAttribute("disabled", "disabled")
+
 
     olldFilter = { ...currentFilter }
 })
 
+document.getElementById("sort").addEventListener("change", (e) => {
+    sort = e.target.value // Получаем новое значение сортировки из выпадающего списка
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
+    // Фильтруем товары с учетом сортировки
+
+    createProductList(filteredProducts)
+    updateProductsCount(productsCount)
+})
+
+
+const getRandomProducts = (products, count) => {
+    // Создаем копию массива товаров, чтобы избежать изменения исходного массива
+    const newProducts = [...products]
+    const randProducts = [] // Массив для хранения случайно выбранных товаров
+
+    do {
+        // Генерируем случайное число от 0 до длины нового массива товаров
+        const randomNumber = Math.floor(Math.random() * newProducts.length)
+
+        // Удаляем один элемент из нового массива и добавляем его в массив случайных товаров
+        randProducts[randProducts.length] = newProducts.splice(randomNumber, 1)[0]
+    } while (randProducts.length < count) // Повторяем, пока количество случайных товаров не достигнет нужного значения
+
+    return randProducts // Возвращаем массив случайных товаров
+}
+
+
+const createRandomProduct = (product) => {
+    const productWrapper = document.createElement("div")
+    productWrapper.classList.add("product")
+
+    const photo = document.createElement("div")
+    photo.classList.add("image")
+
+    const productImage = document.createElement("img")
+    productImage.src = product.image
+    productImage.classList.add("product-image")
+
+    photo.appendChild(productImage)
+    productWrapper.appendChild(photo)
+
+    const info = document.createElement("div")
+    info.classList.add("info")
+
+    const name = document.createElement("div")
+    name.classList.add("name")
+    name.innerHTML = product.name
+
+    const price = document.createElement("div")
+    price.classList.add("price")
+
+    const currentPrice = document.createElement("div")
+    currentPrice.classList.add("current-price")
+    currentPrice.innerHTML = `$${product.price}`
+
+    price.appendChild(currentPrice)
+
+    if (product.oldPrice) {
+        const oldPrice = document.createElement("div")
+        oldPrice.classList.add("old-price")
+        oldPrice.innerHTML = `$${product.oldPrice}`
+
+        price.appendChild(oldPrice)
+    }
+
+    info.appendChild(name)
+    info.appendChild(price)
+
+    productWrapper.appendChild(info)
+
+    return productWrapper
+
+}
+
+
+const generateReviedByYouProducts = () => {
+    // Получаем три случайных товара из общего списка
+    const randomProducts = getRandomProducts(products, 3)
+
+    // Находим контейнер для отображения случайных товаров
+    const container = document.getElementsByClassName('js-reviewed-products')[0]
+
+    container.innerHTML = "" // Очищаем содержимое контейнера перед добавлением новых товаров
+
+    // Для каждого случайного товара создаем элемент и добавляем его в контейнер
+    randomProducts.forEach(product => {
+        const randomProduct = createRandomProduct(product) // Функция для создания элемента товара
+        container.appendChild(randomProduct) // Добавляем созданный элемент в контейнер
+    })
+}
+
+
+generateReviedByYouProducts()
 // Начальная загрузка товаров.
 createProductList(products) // Создаем список товаров.
 updateHeaderInfo() // Обновляем информацию в заголовке (например, количество товаров).

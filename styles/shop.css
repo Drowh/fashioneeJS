@@ -116,7 +116,7 @@
     align-items: center;
 }
 
-.shop .sidebar .sidebar-item .sidebar-content .reviewed-priducts .product .image {
+.shop .sidebar .sidebar-item .sidebar-content .reviewed-priducts .product .image .product-image {
     width: 75px;
     height: 85px;
     background: rgba(241, 242, 243, 1);
