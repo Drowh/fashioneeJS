@@ -679,9 +679,9 @@ const updatePaginationButtons = (productsCount) => {
     leftButton.style.display = paginationInfo.activePage === 0 ? 'none' : 'block'
 
     // Проверяем, есть ли следующая страница
-    rightButton.style.display = paginationInfo.activePage >= pageCount - 1 ? 'none' : 'block'
+    rightButton.style.display = paginationInfo.activePage >= pageCount - 1 ? 'none' : 'block' 
 
-    // Скрываем кнопки пагинации, когда на странице остается 12 или меньше товаров
+    //Скрываем кнопки пагинации, когда на странице остается 12 или меньше товаров
     if (productsCount <= paginationInfo.perPage) {
         leftButton.style.display = 'none'
         rightButton.style.display = 'none'
@@ -777,11 +777,15 @@ const filterProducts = (searchValue, filter, sort, pagination) => {
     filteredProducts = filterProductsByFilterInfo(filteredProducts, filter)
 
     // Фильтрация по цене
-    if (filter.price) {
+    if (filter.price && (filter.price.min || filter.price.max)) {
         filteredProducts = filteredProducts.filter((product) => {
-            return product.price >= filter.price.min && product.price <= filter.price.max
+            const minPrice = filter.price.min ? filter.price.min : 0 // если значение не указано (ввод пустой),  по умолчанию используется значение 0
+            const maxPrice = filter.price.max ? filter.price.max : Infinity // если ввод очищен, он не будет отфильтровывать продукты без необходимости
+
+            return product.price >= minPrice && product.price <= maxPrice
         })
     }
+
 
     // Фильтрация по цвету
     if (filter.color.length) {
