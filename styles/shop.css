@@ -262,6 +262,11 @@
     gap: 30px;
     width: 100%;
     align-items: center;
+    cursor: pointer;
+}
+
+.shop .products-wrapper .pagination.hide {
+    display: none;
 }
 
 .shop .products-wrapper .pagination .pages {

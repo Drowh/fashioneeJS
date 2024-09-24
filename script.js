@@ -328,7 +328,7 @@ let sort = ''
 
 
 // Объекты фильтра
-let olldFilter = {
+let oldFilter = {
     category: 'ALL',
     price: {
         min: 0,
@@ -346,18 +346,23 @@ const currentFilter = {
     color: [],
 }
 
+const paginationInfo = {
+    activePage: 0,
+    perPage: 12
+}
+
 // Функция debounce позволяет избежать частых вызовов функции фильтрации при вводе текста.
 // Она задерживает выполнение функции f на t миллисекунд с момента последнего ввода.
 const debounce = (f, t) => {
     return function (args) {
-        let previousCall = this.lastCall; // Запоминаем время последнего вызова функции.
-        this.lastCall = Date.now(); // Фиксируем текущее время.
+        let previousCall = this.lastCall // Запоминаем время последнего вызова функции.
+        this.lastCall = Date.now() // Фиксируем текущее время.
         if (previousCall && ((this.lastCall - previousCall) <= t)) {
             // Если с предыдущего вызова прошло меньше t миллисекунд, сбрасываем таймер.
-            clearTimeout(this.lastCallTimer);
+            clearTimeout(this.lastCallTimer)
         }
         // Устанавливаем новый таймер для выполнения функции f.
-        this.lastCallTimer = setTimeout(() => f(args), t);
+        this.lastCallTimer = setTimeout(() => f(args), t)
     }
 }
 
@@ -366,7 +371,7 @@ const getFromLS = (key) => {
     try {
         return JSON.parse(localStorage.getItem(key))
     } catch (e) {
-        console.log(e);
+        console.log(e)
     }
 }
 
@@ -374,7 +379,7 @@ const setToLS = (key, value) => {
     try {
         localStorage.setItem(key, JSON.stringify(value))
     } catch (e) {
-        console.log(e);
+        console.log(e)
     }
 }
 
@@ -504,7 +509,7 @@ const createProduct = (product) => {
     topBar.classList.add("favorites")
 
     const favoriteIcon = document.createElement("img")
-    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || [];
+    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || []
     favoriteIcon.src = favoriteProducts.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
 
     favoriteIcon.alt = "Favorite Icon"
@@ -515,7 +520,7 @@ const createProduct = (product) => {
 
         const updatedFavoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || []
         favoriteIcon.src = updatedFavoriteProducts.includes(product.id) ? "./icons/heart-red.svg" : "./icons/heart.svg"
-    });
+    })
 
     favorites.appendChild(favoriteIcon)
 
@@ -575,16 +580,187 @@ const createProduct = (product) => {
     return productWrapper
 }
 
+const createPagination = (productsCount) => {
+    const jsPages = document.getElementsByClassName("js-pages")
+    const pagination = document.getElementById("pagination")
 
-const createProductList = (products) => {
+    if (!productsCount) {
+        pagination.classList.add('hide')
+
+        return
+    }
+
+    if (!jsPages.length) {
+        return
+    }
+
+    pagination.classList.remove('hide')
+
+
+    const jsPagesContainer = jsPages[0]
+
+    jsPagesContainer.innerHTML = ""
+
+    const pageCount = Math.ceil(productsCount / paginationInfo.perPage)
+
+    for (let i = 0; i < pageCount; i++) {
+
+        const page = document.createElement("div")
+        page.classList.add("page")
+
+        if (i === paginationInfo.activePage) {
+            page.classList.add("active")
+        }
+
+        page.innerHTML = i + 1
+        page.dataset.index = i
+
+        page.addEventListener("click", (e) => {
+            const currentElement = e.target
+
+            const alreadyActive = document.querySelectorAll(".page.active")
+
+            if (alreadyActive?.length) {
+                alreadyActive[0].classList.remove("active")
+            }
+
+            currentElement.classList.add("active")
+
+            paginationInfo.activePage = parseInt(currentElement.dataset.index)
+
+            const { filteredProducts, productsCount } = filterProducts(searchValue, oldFilter, sort, paginationInfo)
+
+            createProductList(filteredProducts, productsCount)
+
+            updateProductsCount(productsCount) // Обновляем количество товаров
+            updatePaginationButtons(productsCount) // Передаем актуальное количество товаров
+        })
+
+        jsPagesContainer.appendChild(page)
+
+    }
+}
+
+// Обработчик события для кнопки "влево"
+const leftButtonHandler = () => {
+    // Проверяем, не на первой ли странице
+    if (paginationInfo.activePage > 0) {
+        paginationInfo.activePage-- // Уменьшаем номер активной страницы
+        updateProductList() // Обновляем список товаров
+    }
+}
+
+// Обработчик события для кнопки "вправо"
+const rightButtonHandler = () => {
+    // Проверяем, не на последней ли странице
+    const pageCount = Math.ceil(products.length / paginationInfo.perPage)
+    if (paginationInfo.activePage < pageCount - 1) {
+        paginationInfo.activePage++ // Увеличиваем номер активной страницы
+        updateProductList() // Обновляем список товаров
+    }
+}
+
+// Функция для обновления списка товаров
+const updateProductList = () => {
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort, paginationInfo)
+    createProductList(filteredProducts, productsCount) // Обновляем список товаров
+    updateProductsCount(productsCount) // Обновляем количество товаров
+    updatePaginationButtons(productsCount) // Передаем актуальное количество товаров
+}
+
+
+// Функция для управления видимостью кнопок пагинации
+const updatePaginationButtons = (productsCount) => {
+
+    const pageCount = Math.ceil(productsCount / paginationInfo.perPage)
+    
+
+    // Проверяем, есть ли предыдущая страница
+    leftButton.style.display = paginationInfo.activePage === 0 ? 'none' : 'block'
+
+    // Проверяем, есть ли следующая страница
+    rightButton.style.display = paginationInfo.activePage >= pageCount - 1 ? 'none' : 'block'
+
+    // Скрываем кнопки пагинации, когда на странице остается 12 или меньше товаров
+    if (productsCount <= paginationInfo.perPage) {
+        leftButton.style.display = 'none'
+        rightButton.style.display = 'none'
+    }
+
+}
+
+
+const leftButton = document.querySelector('#pagination .left')
+const rightButton = document.querySelector('#pagination .right')
+
+// Привязываем обработчики событий к кнопкам
+leftButton.addEventListener('click', leftButtonHandler)
+rightButton.addEventListener('click', rightButtonHandler)
+
+
+const createProductList = (products, productsCount) => {
     const jsProducts = document.getElementsByClassName("js-products")
 
-    if (jsProducts.length) {
-        jsProducts[0].innerHTML = ""
-        for (const product of products) {
-            const createdProduct = createProduct(product)
-            jsProducts[0].appendChild(createdProduct)
+    if (!jsProducts.length) {
+        return
+    }
+    jsProducts[0].innerHTML = ""
+
+    for (const product of products) {
+        const createdProduct = createProduct(product)
+        jsProducts[0].appendChild(createdProduct)
+    }
+
+
+    createPagination(productsCount)
+}
+
+const filterBySearchValue = (products, value) => {
+    return products.filter((product) => {
+        return product.name.toLowerCase().includes(value.toLowerCase())
+    })
+}
+
+const filterProductsByFilterInfo = (products, filter) => {
+    let filteredProducts = products
+
+
+    if (filter.category !== 'ALL') {
+        filteredProducts = products.filter(product => {
+            return product.categories.includes(filter.category)
+        })
+    }
+
+    return filteredProducts
+}
+
+const sortProducts = (products, sort) => {
+    // Если значение сортировки установлено, сортируем товары
+    products.sort((a, b) => {
+        if (sort === "ASC") { // Сортировка по возрастанию (от A до Z)
+            if (a.name > b.name) return 1
+            if (a.name === b.name) return 0
+            if (a.name < b.name) return -1
         }
+        // Сортировка по убыванию (от Z до A)
+        if (a.name > b.name) return -1
+        if (a.name === b.name) return 0
+        if (a.name < b.name) return 1
+    })
+
+}
+
+const paginateProducts = (products, paginInfo) => {
+    const productsCount = products.length
+
+    const { perPage, activePage } = paginInfo
+
+    const firstIndex = activePage * perPage
+    const paginatedProducts = products.slice(firstIndex, ((activePage + 1) * perPage))
+
+    return {
+        productsCount,
+        paginatedProducts
     }
 }
 
@@ -595,17 +771,10 @@ const filterProducts = (searchValue, filter, sort, pagination) => {
 
     // Если введено значение для поиска, фильтруем товары по имени.
     if (searchValue) {
-        filteredProducts = filteredProducts.filter((product) => {
-            return product.name.toLowerCase().includes(searchValue.toLowerCase())
-        })
+        filteredProducts = filterBySearchValue(filteredProducts, searchValue)
     }
 
-    // фильтрация по категориям если не all.
-    if (filter.category !== 'ALL') {
-        filteredProducts = filteredProducts.filter(product =>
-            product.categories.includes(filter.category)
-        );
-    }
+    filteredProducts = filterProductsByFilterInfo(filteredProducts, filter)
 
     // Фильтрация по цене
     if (filter.price) {
@@ -618,30 +787,20 @@ const filterProducts = (searchValue, filter, sort, pagination) => {
     if (filter.color.length) {
         filteredProducts = filteredProducts.filter((product) => {
             return filter.color.some(color => product.color.includes(color))
-        });
+        })
     }
 
 
     if (sort) {
-        // Если значение сортировки установлено, сортируем товары
-        filteredProducts.sort((a, b) => {
-            if (sort === "ASC") { // Сортировка по возрастанию (от A до Z)
-                if (a.name > b.name) return 1
-                if (a.name === b.name) return 0
-                if (a.name < b.name) return -1
-            }
-                                   // Сортировка по убыванию (от Z до A)
-            if (a.name > b.name) return -1
-            if (a.name === b.name) return 0
-            if (a.name < b.name) return 1
-        })
+        sortProducts(filteredProducts, sort)
     }
 
-    // Подсчитываем количество отфильтрованных товаров.
-    const productsCount = filteredProducts.length
-    // Возвращаем отфильтрованные товары и их количество.
+    const { paginatedProducts, productsCount } = paginateProducts(filteredProducts, pagination)
+
+
+
     return {
-        filteredProducts,
+        filteredProducts: paginatedProducts,
         productsCount
     }
 }
@@ -653,14 +812,14 @@ const updateProductsCount = (count) => {
 }
 
 
-const toogleBlockFilterBtn = () => {
+const toggleBlockFilterBtn = () => {
     const applyFilter = document.getElementById("apply-filter")
 
     if (currentFilter.category ||
         currentFilter.price.min ||
         currentFilter.price.max ||
         currentFilter.color.length !==
-        olldFilter.category) {
+        oldFilter.category) {
         applyFilter.removeAttribute("disabled")
     } else {
         applyFilter.setAttribute("disabled", "disabled")
@@ -672,9 +831,12 @@ const toogleBlockFilterBtn = () => {
 // Используем debounce, чтобы отсрочить вызов фильтрации на 500 миллисекунд.
 document.getElementById("search-row").addEventListener("keyup", debounce((e) => {
     searchValue = e.target.value // Сохраняем введенное значение поиска.
+
+    paginationInfo.activePage = 0
     // Фильтруем товары по значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
-    createProductList(filteredProducts) // Обновляем список товаров на странице.
+    const { filteredProducts, productsCount } = filterProducts(searchValue, oldFilter, sort, paginationInfo)
+
+    createProductList(filteredProducts, productsCount) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
 }, 500))
 
@@ -690,13 +852,14 @@ for (let i = 0; i < categoryItems.length; i++) {
             e.target.classList.remove("active")
             categoryItems[0].classList.add("active") // Активируем категорию "Все".
 
-            toogleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
+            toggleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
 
             return
         }
 
         // Убираем активный класс с других элементов, если другая категория выбрана.
         const alreadyActive = document.querySelectorAll(".js-category.active")
+
         if (alreadyActive?.length) {
             alreadyActive[0].classList.remove("active")
         }
@@ -704,12 +867,12 @@ for (let i = 0; i < categoryItems.length; i++) {
         e.target.classList.add("active") // Делаем текущую категорию активной.
 
 
-        toogleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
+        toggleBlockFilterBtn() // Обновляем состояние кнопки фильтра.
     })
 }
 
 // Обработка кликов по чекбоксам для фильтрации по цвету
-const colorCheckboxes = document.getElementsByClassName("js-color");
+const colorCheckboxes = document.getElementsByClassName("js-color")
 
 for (let i = 0; i < colorCheckboxes.length; i++) {
     colorCheckboxes[i].addEventListener("change", (e) => {
@@ -725,41 +888,42 @@ for (let i = 0; i < colorCheckboxes.length; i++) {
             currentFilter.color = currentFilter.color.filter(color => color !== selectedColor)
         }
 
-        toogleBlockFilterBtn()
-    });
+        toggleBlockFilterBtn()
+    })
 }
 
 // Обрабатываем изменение минимальной и максимальной цены
 document.getElementById("min-price").addEventListener("input", (e) => {
     currentFilter.price.min = e.target.value
-    toogleBlockFilterBtn()
-});
+    toggleBlockFilterBtn()
+})
 
 document.getElementById("max-price").addEventListener("input", (e) => {
     currentFilter.price.max = e.target.value
-    toogleBlockFilterBtn()
-});
+    toggleBlockFilterBtn()
+})
 
 
 // Обработчик для кнопки "Применить фильтр", который фильтрует товары при клике на кнопку.
 document.getElementById("apply-filter").addEventListener("click", (e) => {
+    paginationInfo.activePage = 0
     // Фильтруем товары по текущему значению поиска и активным фильтрам.
-    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
-    createProductList(filteredProducts) // Обновляем список товаров на странице.
+    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort, paginationInfo)
+    createProductList(filteredProducts, productsCount) // Обновляем список товаров на странице.
     updateProductsCount(productsCount) // Обновляем количество товаров.
 
     e.target.setAttribute("disabled", "disabled")
 
 
-    olldFilter = { ...currentFilter }
+    oldFilter = { ...currentFilter }
 })
 
 document.getElementById("sort").addEventListener("change", (e) => {
     sort = e.target.value // Получаем новое значение сортировки из выпадающего списка
-    const { filteredProducts, productsCount } = filterProducts(searchValue, currentFilter, sort)
+    const { filteredProducts, productsCount } = filterProducts(searchValue, oldFilter, sort, paginationInfo)
     // Фильтруем товары с учетом сортировки
 
-    createProductList(filteredProducts)
+    createProductList(filteredProducts, productsCount)
     updateProductsCount(productsCount)
 })
 
@@ -829,7 +993,7 @@ const createRandomProduct = (product) => {
 }
 
 
-const generateReviedByYouProducts = () => {
+const generateReviewedByYouProducts = () => {
     // Получаем три случайных товара из общего списка
     const randomProducts = getRandomProducts(products, 3)
 
@@ -845,9 +1009,11 @@ const generateReviedByYouProducts = () => {
     })
 }
 
+const { paginatedProducts, productsCount } = paginateProducts(products, paginationInfo)
 
-generateReviedByYouProducts()
-// Начальная загрузка товаров.
-createProductList(products) // Создаем список товаров.
-updateHeaderInfo() // Обновляем информацию в заголовке (например, количество товаров).
-updateProductsCount(products.length)
+generateReviewedByYouProducts()
+// Начальная загрузка товаров
+createProductList(paginatedProducts, productsCount) // Создаем список товаров
+updateHeaderInfo() // Обновляем информацию в заголовке
+updateProductsCount(products.length) // Обновляем количество товаров
+updatePaginationButtons(productsCount) // Устанавливаем начальное состояние кнопок пагинации
