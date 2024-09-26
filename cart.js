@@ -1,78 +1,93 @@
-const PRODUCT_IN_BASKET_KEY = 'product-in-counter'
-const FAVORITE_PRODUCTS_KEY = 'favorites-counter'
+// Ключи для локального хранилища
+const PRODUCT_IN_BASKET_KEY = 'product-in-counter' // Ключ для хранения товаров в корзине
+const FAVORITE_PRODUCTS_KEY = 'favorites-counter'  // Ключ для хранения избранных товаров
+const PROMO_CODE = 'DISCOUNT10'; // Пример промокода
+const PROMO_DISCOUNT = 0.1; // 10% скидка по промокоду
+const DELIVERY_COST = 16; // Стоимость доставки
 
+// Функция для получения данных из localStorage
 const getFromLS = (key) => {
     try {
+        // Преобразование данных из localStorage из формата JSON обратно в массив
         return JSON.parse(localStorage.getItem(key)) || [];
     } catch (e) {
-        console.log(e)
-        return []
+        console.log(e) // Лог ошибки в случае, если данные некорректны
+        return [] // Возврат пустого массива при ошибке
     }
 };
 
+// Функция для записи данных в localStorage
 const setToLS = (key, value) => {
     try {
+        // Сохранение данных в формате JSON в localStorage
         localStorage.setItem(key, JSON.stringify(value))
     } catch (e) {
-        console.log(e)
+        console.log(e) // Лог ошибки в случае неудачи
     }
 };
 
+// Обновление счетчиков корзины и избранного в шапке страницы
 const updateHeaderInfo = () => {
-    const basketCounter = document.getElementsByClassName('js-basket-counter')
-    const favoriteCounter = document.getElementsByClassName('js-favorites-counter')
+    const basketCounter = document.getElementsByClassName('js-basket-counter') // Элементы для отображения количества товаров в корзине
+    const favoriteCounter = document.getElementsByClassName('js-favorites-counter') // Элементы для отображения количества избранных товаров
 
+    // Если на странице отсутствуют элементы для счетчиков, то завершить функцию
     if (!basketCounter.length && !favoriteCounter.length) {
         return false
     }
 
+    // Получение товаров из localStorage
     const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
     const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
 
-    let countInBasket = 0
-    let countInFavorites = 0
+    let countInBasket = 0 // Счетчик товаров в корзине
+    let countInFavorites = 0 // Счетчик избранных товаров
 
+    // Подсчет количества товаров в корзине
     productsInBasket.forEach((product) => {
-        countInBasket += product.quantity
+        countInBasket += product.quantity // Добавляем количество каждого товара
     });
 
+    // Подсчет количества избранных товаров
     favoriteProducts.forEach(() => {
-        countInFavorites += 1
+        countInFavorites += 1 // Увеличиваем счетчик на каждый товар
     });
 
+    // Обновление счетчика в корзине и избранном, если они присутствуют на странице
     if (basketCounter[0]) basketCounter[0].innerHTML = countInBasket
     if (favoriteCounter[0]) favoriteCounter[0].innerHTML = countInFavorites
 };
 
-
+// Функция для удаления товара из корзины
 const removeProductFromBasket = (productId) => {
-    let productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY);
-    productsInBasket = productsInBasket.filter(product => product.id !== productId); 
-    setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket); 
-    updateHeaderInfo(); 
-    displayCartItems(); 
+    let productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY); // Получаем товары из корзины
+    // Фильтрация товаров, оставляем только те, у которых ID не совпадает с удаляемым
+    productsInBasket = productsInBasket.filter(product => product.id !== productId);
+    setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket); // Обновляем данные в localStorage
+    updateHeaderInfo(); // Обновляем информацию в шапке
+    displayCartItems(); // Перерисовываем товары в корзине
 };
 
-
+// Функция для изменения количества товара в корзине
 const updateProductQuantity = (productId, change) => {
-    let productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY);
-    const product = productsInBasket.find(product => product.id === productId);
+    let productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY); // Получаем товары из корзины
+    const product = productsInBasket.find(product => product.id === productId); // Находим товар по ID
 
     if (product) {
-        product.quantity += change;
-        if (product.quantity < 1) {
+        product.quantity += change; // Изменяем количество товара
+        if (product.quantity < 1) { // Не позволяем уменьшить количество меньше 1
             product.quantity = 1;
         }
-        setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket);
-        updateHeaderInfo();
-        displayCartItems(); 
+        setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket); // Обновляем данные в localStorage
+        updateHeaderInfo(); // Обновляем информацию в шапке
+        displayCartItems(); // Перерисовываем товары в корзине
     }
 };
 
-
+// Функция для создания DOM-элементов для отображения товара
 const createProduct = (product) => {
     const orderWrapper = document.createElement("div");
-    orderWrapper.classList.add("order-wrapper");
+    orderWrapper.classList.add("js-order-wrapper");
 
     const productDiv = document.createElement("div");
     productDiv.classList.add("product");
@@ -101,10 +116,11 @@ const createProduct = (product) => {
 
     const currentPrice = document.createElement("div");
     currentPrice.classList.add("current-price");
-    currentPrice.innerHTML = `$${product.price.toFixed(2)}`;
+    currentPrice.innerHTML = `$${product.price.toFixed(2)}`; // Текущая цена товара
 
     price.appendChild(currentPrice);
 
+    // Если есть старая цена, показываем ее
     if (product.oldPrice) {
         const oldPrice = document.createElement("div");
         oldPrice.classList.add("old-price");
@@ -112,23 +128,22 @@ const createProduct = (product) => {
         price.appendChild(oldPrice);
     }
 
-
     const quantityDiv = document.createElement("div");
     quantityDiv.classList.add("quantity");
 
     const minusButton = document.createElement("div");
     minusButton.classList.add("count-button");
     minusButton.innerHTML = "-";
-    minusButton.addEventListener('click', () => updateProductQuantity(product.id, -1));
+    minusButton.addEventListener('click', () => updateProductQuantity(product.id, -1)); // Уменьшаем количество товара
 
     const count = document.createElement("div");
     count.classList.add("count");
-    count.innerHTML = product.quantity;
+    count.innerHTML = product.quantity; // Отображаем текущее количество товара
 
     const plusButton = document.createElement("div");
     plusButton.classList.add("count-button");
     plusButton.innerHTML = "+";
-    plusButton.addEventListener('click', () => updateProductQuantity(product.id, 1));
+    plusButton.addEventListener('click', () => updateProductQuantity(product.id, 1)); // Увеличиваем количество товара
 
     quantityDiv.appendChild(minusButton);
     quantityDiv.appendChild(count);
@@ -139,7 +154,7 @@ const createProduct = (product) => {
 
     const totalPrice = document.createElement("div");
     totalPrice.classList.add("total-price");
-    totalPrice.innerHTML = `$${(product.price * product.quantity).toFixed(2)}`;
+    totalPrice.innerHTML = `$${(product.price * product.quantity).toFixed(2)}`; // Общая цена товара
 
     priceWrapper.appendChild(priceAndQuantity);
     priceWrapper.appendChild(totalPrice);
@@ -151,37 +166,97 @@ const createProduct = (product) => {
     const closeButton = document.createElement("div");
     closeButton.classList.add("close");
     closeButton.innerHTML = 'X';
-    closeButton.addEventListener('click', () => removeProductFromBasket(product.id)); 
+    closeButton.addEventListener('click', () => removeProductFromBasket(product.id)); // Удаление товара из корзины
 
     productInfo.appendChild(closeButton);
 
     productDiv.appendChild(productInfo);
     orderWrapper.appendChild(productDiv);
 
-    
     return orderWrapper;
 };
 
-
-
-
-const displayCartItems = () => {
+// Функция для обновления итоговой стоимости заказа
+const updateOrderSummary = (promoApplied = false) => {
     const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY);
-    const cartContainer = document.querySelector('.js-products-list');
+    let orderTotal = 0;
 
-    cartContainer.innerHTML = '';
+    // Рассчитываем итоговую стоимость заказа на основе количества и цены каждого товара
+    productsInBasket.forEach(product => {
+        orderTotal += product.price * product.quantity;
+    });
 
-    if (productsInBasket.length === 0) {
-        cartContainer.innerHTML = '<p>Корзина пуста</p>';
-        return;
+    document.getElementById('order-price').innerHTML = `$${orderTotal.toFixed(2)}`; // Отображаем стоимость заказа
+
+    // Применение скидки, если введен промокод
+    let discount = 0;
+    if (promoApplied) {
+        discount = orderTotal * PROMO_DISCOUNT;
+        document.getElementById('promo-discount').innerHTML = `-$${discount.toFixed(2)}`; // Отображаем скидку
+    } else {
+        document.getElementById('promo-discount').innerHTML = 'No'; // Если промокод не применен, отображаем "No"
     }
 
-    productsInBasket.forEach((product) => {
-        const productElement = createProduct(product);
-        cartContainer.appendChild(productElement);
-    });
+    // Добавляем стоимость доставки
+    const deliveryCost = DELIVERY_COST;
+    const totalPrice = orderTotal - discount + deliveryCost; // Итоговая сумма заказа
+
+    // Обновляем итоговую стоимость с учетом доставки
+    document.getElementById('total-price').innerHTML = `$${totalPrice.toFixed(2)}`;
 };
 
-// Инициализация
+// Функция для применения промокода
+const applyPromoCode = () => {
+    const promoInput = document.getElementById('promo-code-input').value;
+
+    // Проверка правильности промокода
+    if (promoInput === PROMO_CODE) {
+        updateOrderSummary(true); // Применяем скидку
+    } else {
+        alert('Invalid promo code!'); 
+
+        updateOrderSummary(false); 
+    }
+};
+
+// Добавляем обработчик событий для кнопки "Применить промокод".
+// Когда пользователь нажимает кнопку, вызывается функция applyPromoCode.
+document.getElementById('apply-promo-button').addEventListener('click', applyPromoCode);
+
+// Изначально обновляем итог заказа без применения скидки.
+// Эта функция отвечает за пересчёт общей стоимости заказа.
+updateOrderSummary();
+
+// Функция для отображения товаров в корзине
+const displayCartItems = () => {
+    // Получаем список товаров из localStorage по ключу PRODUCT_IN_BASKET_KEY
+    const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY);
+    // Ищем контейнер для отображения списка товаров в корзине
+    const cartContainer = document.querySelector('.js-products-list');
+
+    // Очищаем содержимое контейнера, чтобы заново отрисовать список товаров
+    cartContainer.innerHTML = '';
+
+    // Если в корзине нет товаров, выводим сообщение, что корзина пуста
+    if (productsInBasket.length === 0) {
+        cartContainer.innerHTML = '<p>the basket is empty</p>';
+        return; // Прекращаем выполнение функции, так как нечего отображать
+    }
+
+    // Перебираем каждый товар в корзине и создаем для него HTML элемент
+    productsInBasket.forEach((product) => {
+        // Создаём элемент для продукта с помощью вспомогательной функции createProduct
+        const productElement = createProduct(product);
+        // Добавляем этот элемент в контейнер корзины
+        cartContainer.appendChild(productElement);
+    });
+
+    // После отрисовки товаров пересчитываем итоговую сумму заказа
+    updateOrderSummary();
+};
+
+// Обновляем информацию в заголовке (например, количество товаров в корзине)
 updateHeaderInfo();
+
+// Отображаем товары, которые находятся в корзине, вызывая функцию displayCartItems
 displayCartItems();

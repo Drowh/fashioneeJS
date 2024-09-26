@@ -96,7 +96,7 @@
 
     <div class="container">
         <div class="cart">
-            <div class="order-wrapper">
+            <div class="order-wrapper js-order-wrapper">
                 <div class="products-list js-products-list">
                     <div class="product">
                         <div class="photo">
@@ -154,21 +154,21 @@
                     <div class="order-price-wrapper">
                         <div class="price-row">
                             <div class="name">Оrder price</div>
-                            <div class="price">$146.98</div>
+                            <div class="price" id="order-price">$146.98</div>
                         </div>
                         <div class="price-row">
                             <div class="name">Discount for promo code</div>
-                            <div>No</div>
+                            <div id="promo-discount">No</div>
                         </div>
                         <div class="price-row delimiter">
                             <div class="name">
                                 Delivery <span class="additional">(Aug 02 at 16:00)</span>
                             </div>
-                            <div class="price">$16</div>
+                            <div class="price" id="delivery-price">$16</div>
                         </div>
                         <div class="price-row total">
                             <div class="name">Total</div>
-                            <div class="price">$162.98</div>
+                            <div class="price" id="total-price">$162.98</div>
                         </div>
                     </div>
                     <div class="button-wrapper">
@@ -186,9 +186,9 @@
                     </div>
                 </div>
                 <div class="promo-code">
-                    <input type="text" name="promo-code" class="input" placeholder="Enter promo code">
+                    <input id="promo-code-input" type="text" name="promo-code" class="input" placeholder="Enter promo code">
                     <div class="button-wrapper">
-                        <button class="button">
+                        <button class="button" id="apply-promo-button">
                             <img src="./icons/button-arrow.svg" alt="arrow-icon">
                         </button>
                         <div class="vertical-line"></div>
