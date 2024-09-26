@@ -416,6 +416,8 @@ const updateHeaderInfo = () => {
 }
 
 
+
+
 const buyProduct = (product) => {
     const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
 
@@ -1021,3 +1023,7 @@ createProductList(paginatedProducts, productsCount) // Создаем списо
 updateHeaderInfo() // Обновляем информацию в заголовке
 updateProductsCount(products.length) // Обновляем количество товаров
 updatePaginationButtons(productsCount) // Устанавливаем начальное состояние кнопок пагинации
+
+
+
+
