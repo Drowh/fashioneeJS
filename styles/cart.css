@@ -26,7 +26,7 @@
     flex-direction: column;
     border-bottom: 2px solid rgba(0, 0, 0, 1);
     padding-bottom: 10px;
-    
+
 }
 
 
@@ -74,7 +74,8 @@
 .cart .order-wrapper .products-list .product .product-info .price-wrapper .price-and-quantity {
     display: flex;
     align-items: center;
-    gap: 48px;
+    width: 282px;
+    justify-content: space-between;
 
 }
 

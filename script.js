@@ -369,11 +369,13 @@ const debounce = (f, t) => {
 
 const getFromLS = (key) => {
     try {
-        return JSON.parse(localStorage.getItem(key))
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : []; // Возвращаем пустой массив, если данных нет
     } catch (e) {
-        console.log(e)
+        console.log(e);
+        return []; // Возвращаем пустой массив в случае ошибки
     }
-}
+};
 
 const setToLS = (key, value) => {
     try {
@@ -393,26 +395,33 @@ const updateHeaderInfo = () => {
     }
 
 
-    const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY)
-    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY)
+    const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY) || []
+    const favoriteProducts = getFromLS(FAVORITE_PRODUCTS_KEY) || []
 
-    if (!productsInBasket && !favoriteProducts) {
-        return false
-    }
 
     let countInBasket = 0
     let countInFavorites = 0
 
+
+    if (Array.isArray(productsInBasket)) {
     productsInBasket.forEach((product) => {
         countInBasket += product.quantity
     })
+    }
 
+    if (Array.isArray(favoriteProducts)) {
     favoriteProducts.forEach((product) => {
         countInFavorites += 1
     })
+    }
 
+    if (basketCounter.length) {
     basketCounter[0].innerHTML = countInBasket
+    }
+
+    if (favoriteCounter.length) {
     favoriteCounter[0].innerHTML = countInFavorites
+}
 }
 
 
@@ -565,15 +574,57 @@ const createProduct = (product) => {
     info.appendChild(name)
     info.appendChild(price)
 
-    const buyButton = document.createElement("button")
-    buyButton.classList.add("buy-btn")
-    buyButton.innerHTML = "Buy Now"
-    buyButton.style.cursor = "pointer"
+
+    
+
+    const buyButton = document.createElement("button");
+    buyButton.classList.add("buy-btn");
+    buyButton.innerHTML = "Buy Now";
+    buyButton.style.cursor = "pointer";
+    buyButton.setAttribute("data-product-id", product.id); // Добавляем атрибут с ID продукта
+
+    // Обработчик события для кнопки
     buyButton.addEventListener("click", (event) => {
-        buyProduct(product)
+        buyProduct(product);
+        updateBuyButtonColor(product.id); // Обновляем цвет кнопки после покупки
+    });
 
+    const updateBuyButtonColor = (productId) => {
+        const buyButton = document.querySelector(`.buy-btn[data-product-id="${productId}"]`); // Выбираем кнопку "Buy Now" по ID продукта
 
+        if (!buyButton) return; // Если кнопка не найдена, ничего не делаем
+
+        const productsInBasket = getFromLS(PRODUCT_IN_BASKET_KEY) || [];
+        const isProductInBasket = productsInBasket.some(product => product.id === productId); // Проверяем, есть ли товар в корзине
+
+        if (isProductInBasket) {
+            buyButton.style.backgroundColor = "green"; // Меняем цвет на зеленый, если товар в корзине
+        } else {
+            buyButton.style.backgroundColor = ""; // Сбрасываем цвет, если товара нет в корзине
+        }
+    };
+
+    const products = getFromLS(PRODUCT_IN_BASKET_KEY); // Получаем список всех продуктов
+
+    products.forEach(product => {
+        // Ваш код для создания кнопки здесь...
+        const buyButton = document.createElement("button");
+        buyButton.classList.add("buy-btn");
+        buyButton.innerHTML = "Buy Now";
+        buyButton.style.cursor = "pointer";
+        buyButton.setAttribute("data-product-id", product.id); // Добавляем атрибут с ID продукта
+
+        // Обработчик события для кнопки
+        buyButton.addEventListener("click", (event) => {
+            buyProduct(product);
+            updateBuyButtonColor(product.id); // Обновляем цвет кнопки после покупки
+        });
+
+        // Обновляем цвет кнопки при инициализации
+        updateBuyButtonColor(product.id); // Вызываем для каждого продукта
     })
+
+
 
     productWrapper.appendChild(photo)
     productWrapper.appendChild(info)

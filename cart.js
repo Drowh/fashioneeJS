@@ -1,8 +1,8 @@
-// Ключи для локального хранилища
+
 const PRODUCT_IN_BASKET_KEY = 'product-in-counter' // Ключ для хранения товаров в корзине
 const FAVORITE_PRODUCTS_KEY = 'favorites-counter'  // Ключ для хранения избранных товаров
 const PROMO_CODE = 'DISCOUNT10'; // Пример промокода
-const PROMO_DISCOUNT = 0.1; // 10% скидка по промокоду
+const PROMO_DISCOUNT = 0.1; // 10% скидка по промо коду
 const DELIVERY_COST = 16; // Стоимость доставки
 
 // Функция для получения данных из localStorage
@@ -75,14 +75,19 @@ const updateProductQuantity = (productId, change) => {
 
     if (product) {
         product.quantity += change; // Изменяем количество товара
-        if (product.quantity < 1) { // Не позволяем уменьшить количество меньше 1
-            product.quantity = 1;
+
+        // Удаляем товар, если количество становится меньше 1
+        if (product.quantity < 1) {
+            removeProductFromBasket(productId); // Удаляем товар из корзины
+        } else {
+            setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket); // Обновляем данные в localStorage
         }
-        setToLS(PRODUCT_IN_BASKET_KEY, productsInBasket); // Обновляем данные в localStorage
+
         updateHeaderInfo(); // Обновляем информацию в шапке
         displayCartItems(); // Перерисовываем товары в корзине
     }
 };
+
 
 // Функция для создания DOM-элементов для отображения товара
 const createProduct = (product) => {
