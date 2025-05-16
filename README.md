@@ -1,1 +1,1 @@
-https://drowh.github.io/fashioneejs/
+https://drowh.github.io/fashioneeJS/
