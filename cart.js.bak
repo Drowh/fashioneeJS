@@ -237,6 +237,16 @@ const applyPromoCode = () => {
   }
 };
 
+// Добавляем обработчик событий для кнопки "Применить промокод".
+// Когда пользователь нажимает кнопку, вызывается функция applyPromoCode.
+document
+  .getElementById("apply-promo-button")
+  .addEventListener("click", applyPromoCode);
+
+// Изначально обновляем итог заказа без применения скидки.
+// Эта функция отвечает за пересчёт общей стоимости заказа.
+updateOrderSummary();
+
 // Функция для отображения товаров в корзине
 const displayCartItems = () => {
   // Получаем список товаров из localStorage по ключу PRODUCT_IN_BASKET_KEY
@@ -265,14 +275,20 @@ const displayCartItems = () => {
   updateOrderSummary();
 };
 
+// Обновляем информацию в заголовке (например, количество товаров в корзине)
+updateHeaderInfo();
+
+// Отображаем товары, которые находятся в корзине, вызывая функцию displayCartItems
+displayCartItems();
+
 // Функция инициализации навигационных элементов
 const initNavigation = () => {
-  // Находим ссылку на Shop в выпадающем меню Pages
-  const shopLink = document.querySelector(
-    ".dropdown-menu a[href='index.html']"
-  );
-  if (shopLink) {
-    // Уже имеет встроенную навигацию через href, дополнительный обработчик не требуется
+  // Находим элемент меню Shop
+  const shopMenuItem = document.querySelector(".menu-item.active");
+  if (shopMenuItem) {
+    shopMenuItem.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
   }
 };
 
@@ -281,6 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateHeaderInfo(); // Обновляем информацию в шапке
   displayCartItems(); // Отображаем товары в корзине
   initNavigation(); // Инициализируем навигацию
+  updateOrderSummary(); // Обновляем итог заказа
 
   // Обработчик события для применения промокода
   document

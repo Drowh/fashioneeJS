@@ -1038,6 +1038,18 @@ const generateReviewedByYouProducts = () => {
   });
 };
 
+const { paginatedProducts, productsCount } = paginateProducts(
+  products,
+  paginationInfo
+);
+
+generateReviewedByYouProducts();
+// Начальная загрузка товаров
+createProductList(paginatedProducts, productsCount); // Создаем список товаров
+updateHeaderInfo(); // Обновляем информацию в заголовке
+updateProductsCount(products.length); // Обновляем количество товаров
+updatePaginationButtons(productsCount); // Устанавливаем начальное состояние кнопок пагинации
+
 // Функция инициализации навигационных элементов
 const initNavigation = () => {
   const cartIcon = document.querySelector(

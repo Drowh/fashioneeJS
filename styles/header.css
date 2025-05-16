@@ -1,10 +1,12 @@
+.header-container {
+    padding: 0 40px;
+}
+
 .header-container .header {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-
 }
-
 
 .header .left-side {
     display: flex;
@@ -90,6 +92,8 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 16px;
+    position: relative;
+    padding-bottom: 20px;
 }
 
 .header .left-side .menu .menu-item .arrow-hover {
@@ -118,6 +122,37 @@
     display: none;
 }
 
+/* Стили для выпадающего меню */
+.header .left-side .menu .menu-item .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 120px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 100;
+    display: none;
+    margin-top: 0;
+}
+
+.header .left-side .menu .menu-item .dropdown-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: #444;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.header .left-side .menu .menu-item .dropdown-menu a:hover {
+    color: #FF8E8E;
+}
+
+.header .left-side .menu .menu-item:hover .dropdown-menu {
+    display: block;
+}
+
 .header .right-side {
     display: flex;
     align-items: center;
@@ -128,6 +163,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    cursor: pointer;
 }
 
 .header .right-side .header-icon .counter {
