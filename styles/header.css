@@ -176,3 +176,23 @@
     font-weight: 700;
     line-height: 14px;
 }
+
+@media screen and (max-width: 907px) {
+    .header-container .header {
+        flex-wrap: wrap;
+        gap: 50px;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+}
+
+@media screen and (max-width: 768px) {
+    .header .left-side {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+}

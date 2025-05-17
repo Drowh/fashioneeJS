@@ -22,6 +22,51 @@
     display: flex;
 }
 
+@media (max-width: 768px) {
+    .footer .footer-info {
+        flex-direction: column;
+        margin: 60px 0 40px 0;
+        padding: 0 20px;
+        gap: 40px;
+    }
+
+    .footer .footer-info .column.column-1,
+    .footer .footer-info .column.column-2,
+    .footer .footer-info .column.column-3,
+    .footer .footer-info .column.column-4 {
+        margin: 0;
+        max-width: 100%;
+    }
+
+    .footer .copyright {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .footer .small-points-footer,
+    .footer .points-right-footer {
+        display: none;
+    }
+
+    .footer .footer-info .column .find-us {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .footer .footer-info .column .about-brand {
+        text-align: center;
+    }
+
+    .footer .footer-info .column .logo {
+        text-align: center;
+    }
+}
+
 
 .footer .footer-info .column .title,
 .footer .footer-info .column .title {
